@@ -104,7 +104,6 @@ public class Game
             case HELP:
                 printHelp();
                 break;
-
             case GO:
                 goRoom(command);
                 break;
@@ -113,6 +112,9 @@ public class Game
                 break;
             case LOOK:
                 System.out.println(currentRoom.getLongDescription());
+                break;
+            case EAT:
+                System.out.println("you have nothing to eat");
                 break;
         }
         return wantToQuit;
