@@ -19,6 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Room priorRoom;
         
     /**
      * Create the game and initialise its internal map.
@@ -37,11 +38,11 @@ public class Game
         Room outside, theater, pub, lab, office;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university", "flower");
-        theater = new Room("in a lecture theater","popcorn");
-        pub = new Room("in the campus pub","beer");
-        lab = new Room("in a computing lab","beaker");
-        office = new Room("in the computing admin office","potato");    
+        outside = new Room("outside the main entrance of the university",new Item("flower",1));
+        theater = new Room("in a lecture theater",new Item("popcorn",2));
+        pub = new Room("in the campus pub",new Item("beer",4));
+        lab = new Room("in a computing lab",new Item("potion",2));
+        office = new Room("in the computing admin office",new Item("stapler", 4));    
         // initialise room exits
         outside.setExit("east", theater);
         outside.setExit("south", lab);
@@ -51,7 +52,8 @@ public class Game
         lab.setExit("north", outside);
         lab.setExit("east", office);
         office.setExit("west", lab);
-        currentRoom = outside;  // start game outside
+        currentRoom = outside;
+        priorRoom = null;// start game outside
     }
 
 
@@ -116,6 +118,9 @@ public class Game
             case EAT:
                 System.out.println("you have nothing to eat");
                 break;
+            case BACK:
+                goBack(command);
+                break;
         }
         return wantToQuit;
     }
@@ -157,8 +162,23 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
+            priorRoom = currentRoom;
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
+        }
+    }
+    private void goBack(Command command)
+    {
+        if(priorRoom != null)
+        {
+            Room nextRoom = priorRoom;
+            priorRoom = currentRoom;
+            currentRoom = nextRoom;
+            System.out.println(currentRoom.getLongDescription());
+        }
+        else
+        {
+            System.out.println("You can't go back");
         }
     }
 

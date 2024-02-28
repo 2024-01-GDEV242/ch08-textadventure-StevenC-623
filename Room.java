@@ -20,7 +20,7 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
-    private String item;
+    private Item item;
 
     /**
      * Create a room described "description". Initially, it has
@@ -28,7 +28,7 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description,String item) 
+    public Room(String description,Item item) 
     {
         this.description = description;
         this.item = item;
