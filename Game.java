@@ -20,6 +20,7 @@ public class Game
     private Parser parser;
     private Room currentRoom;
     private Room priorRoom;
+    private Player thePlayer;
         
     /**
      * Create the game and initialise its internal map.
@@ -38,11 +39,12 @@ public class Game
         Room outside, theater, pub, lab, office;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university",new Item("flower",1));
-        theater = new Room("in a lecture theater",new Item("popcorn",2));
-        pub = new Room("in the campus pub",new Item("beer",4));
-        lab = new Room("in a computing lab",new Item("potion",2));
-        office = new Room("in the computing admin office",new Item("stapler", 4));    
+        outside = new Room("outside the main entrance of the university",new Item("flower",1,true,10));
+        outside.addItem(new Item("key",4,false,0));
+        theater = new Room("in a lecture theater",new Item("popcorn",2,true,20));
+        pub = new Room("in the campus pub",new Item("beer",4,true,20));
+        lab = new Room("in a computing lab",new Item("potion",2,true,50));
+        office = new Room("in the computing admin office",new Item("stapler", 4,true,20));    
         // initialise room exits
         outside.setExit("east", theater);
         outside.setExit("south", lab);
@@ -63,11 +65,10 @@ public class Game
     public void play() 
     {            
         printWelcome();
-
         // Enter the main command loop.  Here we repeatedly read commands and
-        // execute them until the game is over.
-                
+        // execute them until the game is over.       
         boolean finished = false;
+        thePlayer = new Player(currentRoom);
         while (! finished) {
             Command command = parser.getCommand();
             finished = processCommand(command);
@@ -114,12 +115,19 @@ public class Game
                 break;
             case LOOK:
                 System.out.println(currentRoom.getLongDescription());
+                System.out.println("current Health :"+thePlayer.currentHealth());
                 break;
             case EAT:
-                System.out.println("you have nothing to eat");
+                eat(command);
                 break;
             case BACK:
                 goBack(command);
+                break;
+            case PICKUP:
+                pickUp(command);
+                break;
+            case INVENTORY:
+                System.out.println(thePlayer.inventoryDescription());
                 break;
         }
         return wantToQuit;
@@ -154,10 +162,8 @@ public class Game
         }
 
         String direction = command.getSecondWord();
-
         // Try to leave current room.
         Room nextRoom = currentRoom.getExit(direction);
-
         if (nextRoom == null) {
             System.out.println("There is no door!");
         }
@@ -165,6 +171,8 @@ public class Game
             priorRoom = currentRoom;
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
+            thePlayer.step();
+            System.out.println("current Health :"+thePlayer.currentHealth());
         }
     }
     private void goBack(Command command)
@@ -175,6 +183,8 @@ public class Game
             priorRoom = currentRoom;
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
+            thePlayer.step();
+            System.out.println("current Health :"+thePlayer.currentHealth());
         }
         else
         {
@@ -195,6 +205,58 @@ public class Game
         }
         else {
             return true;  // signal that we want to quit
+        }
+    }
+    private void pickUp(Command command)
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("pick up what?");
+            return;
+        }
+
+        String itemToPickup = command.getSecondWord();
+        // Try to leave current room.
+        //Room nextRoom = currentRoom.getExit(direction);
+        boolean found = false;
+        for(int i =0; i<currentRoom.inventoryItems.getInventorySize(); i++)
+        {
+            if(currentRoom.inventoryItems.compareDescriptions(itemToPickup,currentRoom.inventoryItems.getItem(i)))
+            {
+                found = true;
+                thePlayer.getInventory().addItem(currentRoom.inventoryItems.getItem(i));
+                currentRoom.inventoryItems.removeItem(i);
+                System.out.println("you picked up "+itemToPickup);
+            }
+        }
+        if( found == false)
+        {
+            System.out.println("That item isn't here");
+            return;
+        }
+    }
+    private void eat(Command command)
+    {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("eat what?");
+            return;
+        }
+        String itemToEat = command.getSecondWord();
+        boolean found = false;
+        for(int i = 0; i <thePlayer.getInventory().getInventorySize(); i++)
+        {
+            if(thePlayer.getInventory().compareDescriptions(itemToEat,thePlayer.getInventory().getItem(i)))
+            {
+                thePlayer.eat(thePlayer.getInventory().getItem(i));
+                thePlayer.getInventory().removeItem(i);
+                System.out.println("you eat "+itemToEat);
+            }
+        }
+        if( found == false)
+        {
+            System.out.println("you cant eat that");
+            return;
         }
     }
 }

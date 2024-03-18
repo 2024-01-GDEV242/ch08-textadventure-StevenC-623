@@ -1,6 +1,7 @@
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * Class Room - a room in an adventure game.
@@ -20,8 +21,9 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
-    private Item item;
-
+    //private Item item;
+    //private ArrayList<Item> items;
+    public Inventory inventoryItems;
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -30,11 +32,19 @@ public class Room
      */
     public Room(String description,Item item) 
     {
+        //items = new ArrayList<>();
+        inventoryItems = new Inventory();
         this.description = description;
-        this.item = item;
+        inventoryItems.addItem(item);
+        //items.add(item);
+        //this.item = item;
         exits = new HashMap<>();
     }
-
+    //this is me being dumb
+    public void addItem(Item item)
+    {
+       inventoryItems.addItem(item);
+    }
     /**
      * Define an exit from this room.
      * @param direction The direction of the exit.
@@ -51,9 +61,8 @@ public class Room
      */
     public String getShortDescription()
     {
-        return description;
+        return description ;
     }
-
     /**
      * Return a description of the room in the form:
      *     You are in the kitchen.
@@ -62,7 +71,15 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "You are " + description + ".\n" + getExitString();
+        if(inventoryItems.getInventorySize()>0)
+        {
+            return "You are " + description +" there is a "+inventoryItems.printDescriptions() +" here.\n" + getExitString();
+        }
+        else
+        {
+            return "You are " + description +" here.\n" + getExitString();
+        }
+        
     }
 
     /**
@@ -79,7 +96,6 @@ public class Room
         }
         return returnString;
     }
-
     /**
      * Return the room that is reached if we go from this room in direction
      * "direction". If there is no room in that direction, return null.
@@ -90,5 +106,7 @@ public class Room
     {
         return exits.get(direction);
     }
+    
+    
 }
 
