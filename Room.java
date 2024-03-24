@@ -30,12 +30,12 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description,Item item) 
+    public Room(String description) 
     {
         //items = new ArrayList<>();
         inventoryItems = new Inventory();
         this.description = description;
-        inventoryItems.addItem(item);
+        //inventoryItems.addItem(item);
         //items.add(item);
         //this.item = item;
         exits = new HashMap<>();
@@ -73,7 +73,7 @@ public class Room
     {
         if(inventoryItems.getInventorySize()>0)
         {
-            return "You are " + description +" there is a "+inventoryItems.printDescriptions() +" here.\n" + getExitString();
+            return "You are " + description +" there is a "+inventoryItems.printDescriptions() +"here.\n" + getExitString();
         }
         else
         {

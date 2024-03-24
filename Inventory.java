@@ -31,6 +31,19 @@ public class Inventory
         }
         return toReturn;
     }
+    public String printWeightedDescriptions()
+    {
+        String toReturn = new String("");
+        for (int i=0; i< items.size(); i++)
+        {
+            if(i>0)
+            {
+                toReturn = toReturn.concat("and ");
+            }
+            toReturn = toReturn.concat(items.get(i).weightDescription()+" ");
+        }
+        return toReturn;
+    }
     public int getInventorySize()
     {
         return items.size();

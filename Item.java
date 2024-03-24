@@ -27,6 +27,10 @@ public class Item
     {
         return description;
     }
+    public String weightDescription()
+    {
+        return description + " ("+weight+")";
+    }
     public int getWeight()
     {
         return weight;
@@ -42,5 +46,9 @@ public class Item
     public int getHealthChange()
     {
         return healthChange;
+    }
+    public boolean canEat()
+    {
+        return canEat;
     }
 }

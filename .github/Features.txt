@@ -1,0 +1,15 @@
+Features
+Elements for an A
+	-rudimentary health system (u have hp)
+	-eat (increases/decrease health)
+	-locked door
+	- its not a trap door but their are oneway paths?
+	- not sure if my health count counts as a "time limit" becouse im not using
+	 real time but it is a timelimit in the sense the game does end when it hits 0
+Extra Credit
+	-players can have multiple items
+	-rooms can/do aswell
+	-weight + limit
+	-drop items
+	-rooms dont have weight limits it seemed weird but I COULD i did it with my player!
+	- does a shaun of the dead refrence count as extra credit?
