@@ -6,23 +6,20 @@ import java.util.ArrayList;
 /**
  * Class Room - a room in an adventure game.
  *
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.  
+ * This class is part of the "World of Non-Sense" application. 
  *
  * A "Room" represents one location in the scenery of the game.  It is 
  * connected to other rooms via exits.  For each existing exit, the room 
  * stores a reference to the neighboring room.
  * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @author  Steven Coss
+ * @version 2024.03.24
  */
 
 public class Room 
 {
     private String description;
-    private HashMap<String, Room> exits;        // stores exits of this room.
-    //private Item item;
-    //private ArrayList<Item> items;
+    private HashMap<String, Room> exits;        
     public Inventory inventoryItems;
     /**
      * Create a room described "description". Initially, it has
@@ -32,15 +29,14 @@ public class Room
      */
     public Room(String description) 
     {
-        //items = new ArrayList<>();
         inventoryItems = new Inventory();
         this.description = description;
-        //inventoryItems.addItem(item);
-        //items.add(item);
-        //this.item = item;
         exits = new HashMap<>();
     }
-    //this is me being dumb
+    /**
+     * Add an item to the rooms inventory
+     * @param item the item to be added
+     */
     public void addItem(Item item)
     {
        inventoryItems.addItem(item);
@@ -65,7 +61,7 @@ public class Room
     }
     /**
      * Return a description of the room in the form:
-     *     You are in the kitchen.
+     *     You are in the kitchen their is a knife here.
      *     Exits: north west
      * @return A long description of this room
      */

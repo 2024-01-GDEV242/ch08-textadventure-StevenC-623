@@ -1,8 +1,7 @@
 /**
- *  This class is the main class of the "World of Zuul" application. 
- *  "World of Zuul" is a very simple, text based adventure game.  Users 
- *  can walk around some scenery. That's all. It should really be extended 
- *  to make it more interesting!
+ *  This class is the main class of the "World of NonSense" application. 
+ *  Its a simple text adventure where the goal is to find a key hidden in a maze
+ *  in order to get to the pub for a cold paint.
  * 
  *  To play this game, create an instance of this class and call the "play"
  *  method.
@@ -11,8 +10,8 @@
  *  rooms, creates the parser and starts the game.  It also evaluates and
  *  executes the commands that the parser returns.
  * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @author  Steven Coss
+ * @version 2024.03.24
  */
 
 public class Game 
@@ -39,15 +38,13 @@ public class Game
     }
 
     /**
-     * Create all the rooms and link their exits together.
+     * Create all the rooms with their items and link their exits together.
      */
     private void createRooms()
     {
         Room outside, theater, lab,garden,mazeEnt,mazeN,mazeW,mazeE,mazeNW,fountain,mazeS,mazeNE,gazeboPath,gazebo,mazeDeadEnd;
         pub = new Room("in the pub");  
         // create the rooms
-        //outside.addItem(new Item("key",4,false,0));
-        //room.addItem(new Item("flower",1,true,10));
         outside = new Room("outside the main entrance of a university");
         garden = new Room("in a beautiful guardin with a path leading north into a large Maze");
         mazeEnt = new Room("standing before a large archway leading into the maze, a nearby note reads: 'withen lies the key to the pub,beware of gazebo's'");
@@ -64,7 +61,7 @@ public class Game
         theater = new Room("in a movie theater");
         lab = new Room("in a science lab");
         
-        // initialise room exits
+        // initialise room exits and items
         outside.setExit("north", garden);
         outside.setExit("east", theater);
         outside.setExit("south", lab);
@@ -230,7 +227,7 @@ public class Game
 
     /**
      * Print out some help information.
-     * Here we print some stupid, cryptic message and a list of the 
+     * Here we print a message to point he player in the right direction and a list of the 
      * command words.
      */
     private void printHelp() 
@@ -259,7 +256,7 @@ public class Game
 
     /** 
      * Try to go in one direction. If there is an exit, enter the new
-     * room, otherwise print an error message.
+     * room, otherwise print an error message. Each transition reduces the player health by 1
      */
     private void goRoom(Command command) 
     {
@@ -296,6 +293,10 @@ public class Game
             System.out.println("current Health :"+thePlayer.currentHealth());
         }
     }
+    /** 
+     * Attempts to go to the prior room assuming their was one
+     * room, otherwise print an error message. Each transition reduces the player health by 1
+     */
     private void goBack(Command command)
     {
         if(priorRoom != null)
@@ -328,6 +329,11 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
+    /**
+     * "pickup"+"item name" was entered. we check to find out if the item exists in the room
+     * then add it to the players inventory if it does.
+     * otherwise print an error message.
+     */
     private void pickUp(Command command)
     {
         if(!command.hasSecondWord()) {
@@ -365,6 +371,13 @@ public class Game
             return;
         }
     }
+    /**
+     * "eat" + "item name" was entered, attempt to eat an item from within the players inventory
+     * if it can be eaten and is withen the inventory modify the players health (to a min/max of 0/20)
+     * and remove it form their inventory
+     * otherwise print an error message.
+     */
+    
     private void eat(Command command)
     {
         if(!command.hasSecondWord()) {
@@ -390,6 +403,11 @@ public class Game
             return;
         }
     }
+    /**
+     * "drop" + "item name" was entered. attempt to find the item in the players inventory
+     * if its found add it to the current room the player is in and remove it from the players inventory
+     * otherwise print an error message
+     */
     private void drop(Command command)
     {
         if(!command.hasSecondWord()) {
