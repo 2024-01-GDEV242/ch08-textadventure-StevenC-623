@@ -45,7 +45,7 @@ public class Game
         Room outside, theater, lab,garden,mazeEnt,mazeN,mazeW,mazeE,mazeNW,fountain,mazeS,mazeNE,gazeboPath,gazebo,mazeDeadEnd;
         pub = new Room("in the pub");  
         // create the rooms
-        outside = new Room("outside the main entrance of a university");
+        outside = new Room("outside the main entrance of a university");       
         garden = new Room("in a beautiful guardin with a path leading north into a large Maze");
         mazeEnt = new Room("standing before a large archway leading into the maze, a nearby note reads: 'withen lies the key to the pub,beware of gazebo's'");
         mazeN = new Room("lush green walls of plantlife rise up around you, from here the path splits");
@@ -157,7 +157,7 @@ public class Game
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
-
+    
     /**
      * Print out the opening message for the player.
      */
@@ -273,8 +273,9 @@ public class Game
         {
             System.out.println("This is the path to the pub however");
             System.out.println("The Door to the pub is locked");
+            //nextRoom = null;
         }
-        if(nextRoom == pub && thePlayer.hasKey() == true)
+        else if(nextRoom == pub && thePlayer.hasKey() == true)
         {
             System.out.println("This is the path to the pub however the door is locked");
             System.out.println("Thankfully you have found the key and unlock the door");
@@ -282,7 +283,7 @@ public class Game
             currentRoom = nextRoom;
             System.out.println("You made it! time to sit down have a cold paint and wait for all this to blow over.");
         }
-        if (nextRoom == null) {
+        else if (nextRoom == null) {
             System.out.println("There is no path!");
         }
         else {
